@@ -1,0 +1,14 @@
+{
+  "name": "firstwebapp",
+  "version": "1.0.0",
+  "description": "doing a API from google sheets",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gaiarimm",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^39.2.0"
+  }
+}
