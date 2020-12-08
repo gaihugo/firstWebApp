@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style scr="public\style.css"></style>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>API GOOGLE SHEETS</title>
   </head>
 
   <body>
-    <h1>Google Sheets API</h1>
     <div id="app">
+      <h1>Google Sheets API</h1>
       <br />
       <label for="name">Nome do Aluno:</label><br />
       <input
@@ -37,7 +38,12 @@
         <option value="81">81</option></datalist
       ><br />
       <button id="send" type="submit">Enviar</button>
-      <button type="reset" id="reset" @click="reset">Resetar</button>
+      <button type="reset" id="reset" @click="reset">Resetar</button><br />
+      <br />
+      <div v-for="aluno in alunos" id="itemlist">
+        <b>Nome: </b>{{aluno.nome}}<br />
+        <b>Turma: </b>{{aluno.turma}}<br /><br />
+      </div>
     </div>
   </body>
   <script>
@@ -46,8 +52,13 @@
       data: {
         fname: "",
         fturma: "",
+        alunos: "",
       },
-      mounted() {},
+      mounted() {
+        axios.get("/api/alunos/").then((data) => {
+          this.alunos = data.data;
+        });
+      },
       methods: {
         reset: function () {
           this.fname = "";

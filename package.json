@@ -4,11 +4,16 @@
   "description": "doing a API from google sheets",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon main.js"
   },
   "author": "Gaiarimm",
   "license": "ISC",
   "dependencies": {
-    "googleapis": "^39.2.0"
+    "body-parse": "^0.1.0",
+    "express": "^4.17.1",
+    "googleapis": "^39.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
   }
 }
