@@ -16,7 +16,12 @@ const keys = require("./keys.json");
 const client = new google.auth.JWT(keys.client_email, null, keys.private_key, [
   "https://www.googleapis.com/auth/spreadsheets",
 ]);
+var num = undefined;
 
+//Cria um objeto
+function obj(name, turma) {
+  return [name, turma];
+}
 // GET=> Mostra os dados da Planilha
 app.get("/api/alunos/", (req, res) => {
   async function getData(cl) {
@@ -42,11 +47,11 @@ app.get("/api/alunos/", (req, res) => {
       var id = dataArray.indexOf(r);
       objData.push({ nome: r[0], turma: r[1], id: id });
     });
-
     console.log(objData);
+    num = objData.length;
     res.json(objData);
   }
-  //Verificação da conexão do cliente com o Google sheets
+
   client.authorize((err, tokens) => {
     if (err) {
       console.log(err);
@@ -58,17 +63,33 @@ app.get("/api/alunos/", (req, res) => {
   });
 });
 
-// async function (cl) {
-//   // POST /api/plantas => Cria um novo aluno
-//   const updateOpt = {
-//     spreadsheetId: "1D1yJI1pYQzs9ZummvcpOtFpVLopb8DSeKUAKK1pdK2w",
-//     range: "E2", //Onde Adicionar
-//     valueInputOption: "USER_ENTERED", //"Metodo de escrita na planilha"
-//     resource: { values: mapDat }, //O que adicionar
-//   };
+// POST /api/plantas => Cria um novo aluno
+app.post("/api/alunos/", (req, res) => {
+  async function postAsw(cl) {
+    var aswf = [];
+    var row = num + 2;
+    aswf.push(obj(req.body.answer1, req.body.answer2));
+    const gsapi = google.sheets({ version: "v4", auth: cl });
+    const updateOpt = {
+      spreadsheetId: "1D1yJI1pYQzs9ZummvcpOtFpVLopb8DSeKUAKK1pdK2w",
+      range: `A${row}:B${row}`, //Onde Adicionar
+      valueInputOption: "USER_ENTERED", //"Metodo de escrita na planilha"
+      resource: { values: aswf }, //O que adicionar
+    };
 
-//   let res = await gsapi.spreadsheets.values.update(updateOpt);
-//   console.log(res);
-// }
+    let res = await gsapi.spreadsheets.values.update(updateOpt);
+    console.log(res);
+  }
+
+  client.authorize((err, tokens) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      console.log("Connected!!");
+      postAsw(client);
+    }
+  });
+});
 
 app.listen(port);

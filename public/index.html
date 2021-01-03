@@ -37,7 +37,7 @@
         <option value="91">91</option>
         <option value="81">81</option></datalist
       ><br />
-      <button id="send" type="submit">Enviar</button>
+      <button id="send" type="submit" @click="addStudent">Enviar</button>
       <button type="reset" id="reset" @click="reset">Resetar</button><br />
       <br />
       <div v-for="aluno in alunos" id="itemlist">
@@ -60,6 +60,31 @@
         });
       },
       methods: {
+        addStudent: function () {
+          if (this.fname == "") {
+            alert("Você não insriu nada no campo de Nome!!");
+            return;
+          } else {
+            if (this.fturma == "") {
+              alert("Você não insriu nada no campo de Turma!!");
+              return;
+            }
+          }
+
+          axios.post("/api/alunos/", {
+            answer1: this.fname,
+            answer2: this.fturma,
+          });
+
+          axios.get("/api/alunos/").then((data) => {
+            this.alunos = data.data;
+          });
+
+          // Reseta para o modo de adição
+          this.fname = "";
+          this.fturma = "";
+        },
+
         reset: function () {
           this.fname = "";
           this.fturma = "";
